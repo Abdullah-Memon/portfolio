@@ -1,0 +1,167 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  name     String
+  role     String @default("admin")
+}
+
+model Profile {
+  id          Int      @id @default(autoincrement())
+  name        String
+  title       String
+  email       String
+  phone       String?
+  location    String?
+  website     String?
+  bio         String?
+  avatar      String?
+  linkedin    String?
+  github      String?
+  twitter     String?
+  instagram   String?
+  dateOfBirth DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Education {
+  id          Int       @id @default(autoincrement())
+  institute   String
+  degree      String
+  field       String?
+  startDate   DateTime
+  endDate     DateTime?
+  description String?
+  grade       String?
+  location    String?
+  isActive    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Experience {
+  id          Int       @id @default(autoincrement())
+  company     String
+  position    String
+  startDate   DateTime
+  endDate     DateTime?
+  description String?
+  location    String?
+  isActive    Boolean   @default(false)
+  skills      String?   // JSON array of skills
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Skill {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  category    String   // "technical", "soft", "language", etc.
+  level       String   // "beginner", "intermediate", "advanced", "expert"
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  slug      String   @unique
+  content   String
+  excerpt   String?
+  published Boolean  @default(false)
+  featured  Boolean  @default(false)
+  tags      String?  // JSON array of tags
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  description String?
+  longDescription String?
+  imageUrl    String?
+  demoUrl     String?
+  githubUrl   String?
+  technologies String? // JSON array of technologies
+  featured    Boolean  @default(false)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Achievement {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  organization String?
+  date        DateTime
+  certificateUrl String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Settings {
+  id                Int      @id @default(autoincrement())
+  primaryColor      String   @default("teal")     // Primary color theme
+  sessionDuration   Int      @default(3600)       // Session duration in seconds (1hr = 3600s)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Testimonial {
+  id          Int      @id @default(autoincrement())
+  clientName  String
+  clientTitle String
+  company     String?
+  feedback    String
+  avatarUrl   String?  // URL/path to client avatar image
+  rating      Int      @default(5)  // 1-5 star rating
+  featured    Boolean  @default(false)  // Whether to highlight this testimonial
+  published   Boolean  @default(true)   // Whether to show on public site
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([clientName, company])
+}
+
+model Statistics {
+  id        Int      @id @default(autoincrement())
+  label     String   // e.g., "Years Experience", "Projects Completed"
+  value     Int      // The numeric value
+  suffix    String?  // e.g., "+", "%", "K+"
+  icon      String?  // Optional icon class or emoji
+  order     Int      @default(0)  // Display order
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([label])
+}
