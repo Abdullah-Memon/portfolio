@@ -23,10 +23,15 @@ export default function AdminPosts() {
       const response = await fetch('/api/posts');
       if (response.ok) {
         const data = await response.json();
-        setPosts(data);
+        // The API returns { posts, pagination }, so we need data.posts
+        setPosts(data.posts || []);
+      } else {
+        console.error('Failed to fetch posts:', response.statusText);
+        setPosts([]);
       }
     } catch (error) {
       console.error('Failed to fetch posts:', error);
+      setPosts([]);
     } finally {
       setLoading(false);
     }

@@ -21,13 +21,18 @@ export default function AdminProjectsPage() {
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/projects');
+      const response = await fetch('/api/projects?published=all');
       if (response.ok) {
         const data = await response.json();
-        setProjects(data);
+        // API returns { projects, pagination }, so we need data.projects
+        setProjects(data.projects || []);
+      } else {
+        console.error('Failed to fetch projects:', response.statusText);
+        setProjects([]);
       }
     } catch (error) {
       console.error('Failed to fetch projects:', error);
+      setProjects([]);
       toast.error('Failed to fetch projects');
     } finally {
       setLoading(false);

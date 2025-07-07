@@ -30,71 +30,39 @@ const authOptions = {
           return null;
         }
 
-        // Static admin credentials from environment variables
-        const adminEmail = process.env.ADMIN_EMAIL || 'abdullahmemon1502@gmail.com';
-        const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
-        const adminName = process.env.ADMIN_NAME || 'Admin User';
-
-        console.log('Auth Debug - Admin Email:', adminEmail);
-        console.log('Auth Debug - Has Password Hash:', !!adminPasswordHash);
-        console.log('Auth Debug - Input Email:', credentials.email);
-
-        // Check static admin credentials first
-        if (credentials.email === adminEmail) {
-          let isValidPassword = false;
-          
-          if (adminPasswordHash) {
-            // Use hashed password from environment
-            isValidPassword = await bcrypt.compare(credentials.password, adminPasswordHash);
-            console.log('Auth Debug - Password comparison result:', isValidPassword);
-          } else {
-            // Fallback to plain text comparison (for development only)
-            isValidPassword = credentials.password === '#!nclude<Adm!n_123>';
-            console.log('Auth Debug - Using fallback password, result:', isValidPassword);
-          }
-          
-          if (isValidPassword) {
-            console.log('Auth Debug - Admin login successful');
-            return {
-              id: 'admin-1',
-              email: adminEmail,
-              name: adminName,
-              role: 'admin',
-            };
-          } else {
-            console.log('Auth Debug - Admin password incorrect');
-          }
-        } else {
-          console.log('Auth Debug - Email does not match admin email');
-        }
-
         try {
-          // Try database as secondary option (for additional users)
+          // Find user in database
           const user = await prisma.user.findUnique({
             where: { email: credentials.email }
           });
 
-          if (user) {
-            const isPasswordValid = await bcrypt.compare(
-              credentials.password,
-              user.password
-            );
-
-            if (isPasswordValid) {
-              return {
-                id: user.id.toString(),
-                email: user.email,
-                name: user.name,
-                role: user.role,
-              };
-            }
+          if (!user) {
+            console.log('User not found:', credentials.email);
+            return null;
           }
+
+          // Verify password
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isPasswordValid) {
+            console.log('Invalid password for user:', credentials.email);
+            return null;
+          }
+
+          console.log('User login successful:', user.email);
+          return {
+            id: user.id.toString(),
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          };
         } catch (error) {
           console.error('Database auth error:', error);
-          // Database errors won't prevent admin login
+          return null;
         }
-
-        return null;
       }
     })
   ],

@@ -4,6 +4,9 @@ import { Card, CardBody, Typography, Button, Chip, Avatar } from '@material-tail
 import { formatDistanceToNow } from 'date-fns';
 
 export default function ProjectList({ projects, onEdit, onDelete }) {
+  // Ensure projects is an array
+  const projectsList = Array.isArray(projects) ? projects : [];
+  
   const getStatusColor = (published, featured) => {
     if (!published) return 'gray';
     if (featured) return 'orange';
@@ -18,7 +21,7 @@ export default function ProjectList({ projects, onEdit, onDelete }) {
 
   return (
     <div className="space-y-4">
-      {projects.length === 0 ? (
+      {projectsList.length === 0 ? (
         <Card className="dark:bg-gray-800">
           <CardBody className="text-center py-12">
             <Typography variant="h6" color="blue-gray" className="mb-2 dark:text-white">
@@ -30,7 +33,7 @@ export default function ProjectList({ projects, onEdit, onDelete }) {
           </CardBody>
         </Card>
       ) : (
-        projects.map((project) => (
+        projectsList.map((project) => (
           <Card key={project.id} className="dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
             <CardBody>
               <div className="flex flex-col lg:flex-row gap-4">

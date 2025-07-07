@@ -19,6 +19,7 @@ import {
   CogIcon,
   StarIcon,
   PresentationChartBarIcon,
+  UsersIcon,
 } from '@heroicons/react/24/outline';
 
 const navigation = [
@@ -29,6 +30,7 @@ const navigation = [
   { name: 'Statistics', href: '/admin/statistics', icon: PresentationChartBarIcon },
   { name: 'Profile', href: '/admin/profile', icon: UserIcon },
   { name: 'Messages', href: '/admin/messages', icon: ChatBubbleLeftIcon },
+  { name: 'Users', href: '/admin/users', icon: UsersIcon },
   { name: 'Settings', href: '/admin/settings', icon: CogIcon },
 ];
 

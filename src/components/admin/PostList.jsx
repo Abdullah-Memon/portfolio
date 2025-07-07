@@ -6,9 +6,12 @@ import { PencilIcon, TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
 import { parseJSON } from '@/utils/helpers';
 
 export default function PostList({ posts, onEdit, onDelete }) {
+  // Ensure posts is an array
+  const postsList = Array.isArray(posts) ? posts : [];
+  
   return (
     <div className="space-y-4">
-      {posts.length === 0 ? (
+      {postsList.length === 0 ? (
         <Card>
           <CardBody className="text-center py-12">
             <Typography color="gray">
@@ -17,7 +20,7 @@ export default function PostList({ posts, onEdit, onDelete }) {
           </CardBody>
         </Card>
       ) : (
-        posts.map((post) => {
+        postsList.map((post) => {
           const tags = post.tags ? parseJSON(post.tags) : [];
           return (
             <Card key={post.id}>
