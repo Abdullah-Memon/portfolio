@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@material-tailwind/react';
 
 export default function UserManager() {
   const [users, setUsers] = useState([]);
@@ -92,7 +92,8 @@ export default function UserManager() {
         <h1 className="text-2xl font-bold">User Management</h1>
         <Button 
           onClick={() => setShowCreateForm(!showCreateForm)}
-          className="bg-blue-600 hover:bg-blue-700"
+          color="blue"
+          className="flex items-center gap-2"
         >
           {showCreateForm ? 'Cancel' : 'Add User'}
         </Button>
@@ -143,7 +144,7 @@ export default function UserManager() {
                 <option value="user">User</option>
               </select>
             </div>
-            <Button type="submit" className="bg-green-600 hover:bg-green-700">
+            <Button type="submit" color="green">
               Create User
             </Button>
           </form>
@@ -164,7 +165,7 @@ export default function UserManager() {
               </div>
               <Button
                 onClick={() => deleteUser(user.id)}
-                variant="destructive"
+                color="red"
                 size="sm"
               >
                 Delete
