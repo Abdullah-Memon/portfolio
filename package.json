@@ -15,7 +15,11 @@
     "db:push": "prisma db push",
     "db:reset": "prisma migrate reset",
     "db:seed": "node prisma/seed.js",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate",
+    "db:generate:dataproxy": "prisma generate --data-proxy",
+    "deploy:setup": "npm run db:generate:dataproxy",
+    "vercel:deploy": "vercel --prod"
   },
   "dependencies": {
     "@heroicons/react": "2.0.18",

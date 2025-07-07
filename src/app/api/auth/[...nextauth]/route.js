@@ -61,7 +61,19 @@ const authOptions = {
           };
         } catch (error) {
           console.error('Database auth error:', error);
-          return null;
+          
+          // Log more detailed error information
+          if (error.code === 'P6001') {
+            console.error('Prisma Data Proxy connection error. Check your DATABASE_URL configuration.');
+          }
+          
+          // In production, return null to prevent auth bypass
+          if (process.env.NODE_ENV === 'production') {
+            return null;
+          }
+          
+          // In development, you might want to throw the error for debugging
+          throw error;
         }
       }
     })
